@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CPT304 Ass2</title>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <p>Select a country</p>
+    <select id="country" onclick="getCountries()" onchange="onCountryChangeHandler()" style="width: 300px;">
+        <option value="">Select a country</option>
+    </select>
+    <br><br>
+    <p>Select a holiday</p>
+    <select id="holiday" style="width: 300px;">
+        <option value="">Select a holiday</option>
+    </select>
+    <br><br>
+    <p>Select your area</p>
+    <select id="area" onchange="onAreaChangeHandler()" style="width: 300px;">
+        <option value="">Select your area</option>
+    </select>
+    <br><br>
+    <div id="weather"></div>
+    <br><br>
+    <div id="accommodation"></div>
+</body>
+
+</html>
+<script>
+    function onCountryChangeHandler() {
+        getHolidays();
+        getAreas();
+    }
+    function onAreaChangeHandler() {
+        getWeather();
+        getAccommodation();
+    }
+</script>
