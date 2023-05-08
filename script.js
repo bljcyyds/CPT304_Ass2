@@ -88,29 +88,37 @@ function getWeather() {
   dt = new Date(holidayDate);
   dt = dt.getTime() / 1000;
   console.log(dt);
-  var url = `https://api.openweathermap.org/data/2.5/weather?q=${area},${country}&appid=3441ed941ca1951eb786a4e927e78643&dt=${dt}`;
 
+  var url=`https://api.openweathermap.org/data/2.5/forecast?q=${area},${country}&appid=3441ed941ca1951eb786a4e927e78643`;
   var xhr = new XMLHttpRequest();
   xhr.open("GET", url, true);
+  //holidayDate="2023-05-11";
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
-      //get the max and min temperature
       var resp = JSON.parse(xhr.responseText);
-      var temperature = resp.main.temp;
-      var description = resp.weather[0].description;
-      var maxTemp = resp.main.temp_max;
-      var minTemp = resp.main.temp_min;
-      temperature = Math.round(temperature - 273.15);
-      maxTemp = Math.round(maxTemp - 273.15);
-      minTemp = Math.round(minTemp - 273.15);
-      var weatherDiv = document.getElementById("weather");
-      weatherDiv.innerHTML = "<p>Weather : " + description + ", max temperature: " +
-        maxTemp + " &#8451 , min temperature: " + minTemp + " &#8451;</p>";
+      for (var i = 0; i < resp.list.length; i++) {
+        var weatherDate = resp.list[i].dt_txt;
+        weatherDate = weatherDate.slice(0,10);
+        holidayDate = holidayDate.slice(0,10);
+        if (weatherDate == holidayDate) {
+          var temperature = resp.list[i].main.temp;
+          var description = resp.list[i].weather[0].description;
+          var maxTemp = resp.list[i].main.temp_max;
+          var minTemp = resp.list[i].main.temp_min;
+          temperature = Math.round(temperature - 273.15);
+          maxTemp = Math.round(maxTemp - 273.15);
+          minTemp = Math.round(minTemp - 273.15);
+          var weatherDiv = document.getElementById("weather");
+          weatherDiv.innerHTML = "<p>Weather : " + description + ", max temperature: " +
+            maxTemp + " &#8451 , min temperature: " + minTemp + " &#8451;</p>";
+          
+        }
+      }
 
     }
     else {
       var weatherDiv = document.getElementById("weather");
-      weatherDiv.innerHTML = "<p>Weather unavailable</p>";
+      weatherDiv.innerHTML = "<p>Weather unavailable, it only forecast the weather in 5 days.</p>";
 
     }
   }
@@ -182,13 +190,12 @@ function getAccommodation1(id, holidayDate, holidayDate1) {
     }
     if (xhr.readyState == 4 && xhr.status != 200) {
       var hotelDiv = document.getElementById("accommodation");
-      hotelDiv.innerHTML = "<p>Accommodation unavailable</p>";
+      hotelDiv.innerHTML = "<p>Accommodation unavailable, please choose another day.</p>";
 
     }
 
   }
   xhr.send();
-
 
 }
 
